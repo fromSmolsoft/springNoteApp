@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<html xmlns:th="https://www.thymeleaf.org">-->
+<head>
+    <meta charset="UTF-8">
+    <title>List of notes</title>
+</head>
+<body>
+<!--todo button "create new note"-->
+<a class="create-button" th:href="@{/notes/create}">Add new note</a>
+
+<table class="table table-dark">
+    <thead>
+    <tr>
+        <th scope="col">Note title</th>
+        <th scope="col">Modified</th>
+        <th scope="col">Created</th>
+        <th scope="col">id</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="note: ${notes}">
+
+        <td th:text="${note.title}"/>
+        <td th:text="${note.modifiedDateTime}"/>
+        <td th:text="${note.creationDateTime}"/>
+        <td th:text="${note.noteId}"/>
+        <td>details</td>
+        <td>
+            <p>
+                <a th:href="@{'/notes/edit/' + ${note.noteId}}">edit</a> |
+                <a th:href="@{'/notes/delete/' + ${note.noteId}}">delete</a>
+            </p>
+        </td>
+
+    </tr>
+    </tbody>
+
+
+</table>
+
+
+</body>
+</html>
