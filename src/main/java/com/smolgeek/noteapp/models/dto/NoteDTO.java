@@ -14,7 +14,8 @@ import java.time.OffsetDateTime;
 /** Data Transfer Object */
 @Getter
 @Setter
-public class NoteGTO {
+public class NoteDTO {
+
 
     @Setter(AccessLevel.PRIVATE)
     private long noteId;
@@ -33,5 +34,14 @@ public class NoteGTO {
     @DateTimeFormat(pattern = "")
     private OffsetDateTime modifiedDateTime;
 
+    public NoteDTO() {
+    }
 
+    public NoteDTO(long noteId, String title, String content, OffsetDateTime creationDateTime, OffsetDateTime modifiedDateTime) {
+        this.noteId = noteId;
+        this.title = title;
+        this.content = content;
+        this.creationDateTime = creationDateTime;
+        this.modifiedDateTime = modifiedDateTime;
+    }
 }
