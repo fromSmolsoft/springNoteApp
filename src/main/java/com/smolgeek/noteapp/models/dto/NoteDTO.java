@@ -17,7 +17,7 @@ import java.time.OffsetDateTime;
 public class NoteDTO {
 
 
-    @Setter(AccessLevel.PRIVATE)
+
     private long noteId;
 
     @NotBlank(message = "Fill in the title")
