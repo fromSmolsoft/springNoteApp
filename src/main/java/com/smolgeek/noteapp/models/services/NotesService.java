@@ -22,4 +22,6 @@ public interface NotesService {
     /** Delete note from data storage */
     void remove(long noteId);
 
+
+    void updateNoteDTO(NoteDTO noteDTO, NoteDTO note);
 }

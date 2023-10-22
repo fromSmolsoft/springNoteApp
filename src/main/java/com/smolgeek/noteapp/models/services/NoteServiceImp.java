@@ -82,6 +82,17 @@ public class NoteServiceImp implements NotesService {
         noteRepository.delete(noteEntity);
     }
 
+    @Override
+    public void updateNoteDTO(NoteDTO source, NoteDTO target) {
+        if (source == null) return;
+
+        target.setNoteId(source.getNoteId());
+        target.setTitle(source.getTitle());
+        target.setContent(source.getContent());
+        target.setModifiedDateTime(source.getModifiedDateTime());
+        target.setCreationDateTime(source.getCreationDateTime());
+    }
+
     private NoteEntity getNoteOrTrow(long noteId) {
         return noteRepository.findById(noteId).orElseThrow(NoteNotFoundException::new);
     }
@@ -89,6 +100,7 @@ public class NoteServiceImp implements NotesService {
     /** Converts entity to GTO. (Transfers data) */
     private NoteDTO entityToGTO(NoteEntity noteEntitiy) {
         NoteDTO noteDTO = new NoteDTO();
+        noteDTO.setNoteId(noteEntitiy.getNoteId());
         noteDTO.setTitle(noteEntitiy.getTitle());
         noteDTO.setContent(noteEntitiy.getContent());
         noteDTO.setCreationDateTime(noteEntitiy.getCreationDateTime());
