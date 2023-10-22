@@ -1,6 +1,7 @@
 package com.smolgeek.noteapp.controllers;
 
 import com.smolgeek.noteapp.models.dto.NoteDTO;
+import com.smolgeek.noteapp.models.exceptions.NoteNotFoundException;
 import com.smolgeek.noteapp.models.services.NotesService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +96,24 @@ public class NoteController {
         return "redirect:/notes";
     }
 
-    //--- todo delete note ---
 
+    //--- delete note ---
+
+
+    @GetMapping("delete/{noteId}")
+    public String deleteNote(@PathVariable long noteId, RedirectAttributes redirectAttributes) {
+        notesService.remove(noteId);
+        redirectAttributes.addFlashAttribute("success", "Note was deleted.");
+        return "redirect:/notes";
+    }
+
+
+    //---expetions ---
+
+    @ExceptionHandler({NoteNotFoundException.class})
+    private String handleNoteNotFoundException(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", "Note wasn't found.");
+        return "redirect:/articles";
+    }
 
 }
