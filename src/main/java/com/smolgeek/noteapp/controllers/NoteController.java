@@ -99,7 +99,6 @@ public class NoteController {
 
     //--- delete note ---
 
-
     @GetMapping("delete/{noteId}")
     public String deleteNote(@PathVariable long noteId, RedirectAttributes redirectAttributes) {
         notesService.remove(noteId);
@@ -108,7 +107,7 @@ public class NoteController {
     }
 
 
-    //---expetions ---
+    //---exceptions ---
 
     @ExceptionHandler({NoteNotFoundException.class})
     private String handleNoteNotFoundException(RedirectAttributes redirectAttributes) {
