@@ -49,3 +49,4 @@
     - Use at your own risk. Author or any possible contributors are not responsible for any kind of damage, security breakage or malfunction that may or may not arise from using any part of the app for any purpose.
     - It's NOT to be taken as finished product.
     - It is not meant for production use.
+    - There may or may not be so-called errors in any part of the app as in any available code out there. 
