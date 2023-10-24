@@ -2,7 +2,7 @@ package com.smolgeek.noteapp.models.services;
 
 import com.smolgeek.noteapp.data.entities.NoteEntity;
 import com.smolgeek.noteapp.data.repositories.NoteRepository;
-import com.smolgeek.noteapp.models.dto.NoteGTO;
+import com.smolgeek.noteapp.models.dto.NoteDTO;
 import com.smolgeek.noteapp.models.exceptions.NoteNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,13 @@ public class NoteServiceImp implements NotesService {
 
     /**
      * Create new note
-     * @param noteGTO
+     * @param noteDTO
      */
     @Override
-    public void create(NoteGTO noteGTO) {
+    public void create(NoteDTO noteDTO) {
         NoteEntity newNote = new NoteEntity();
-        newNote.setTitle(noteGTO.getTitle());
-        newNote.setContent(noteGTO.getContent());
+        newNote.setTitle(noteDTO.getTitle());
+        newNote.setContent(noteDTO.getContent());
 
         OffsetDateTime dateTime = Instant.now().atOffset(ZoneOffset.UTC);
         newNote.setCreationDateTime(dateTime);
@@ -39,13 +39,13 @@ public class NoteServiceImp implements NotesService {
 
     /**
      * Edit existing note
-     * @param noteGTO
+     * @param noteDTO
      */
     @Override
-    public void edit(NoteGTO noteGTO) {
-        NoteEntity oldNote = getNoteOrTrow(noteGTO.getNoteId());
-        oldNote.setTitle(noteGTO.getTitle());
-        oldNote.setContent(noteGTO.getContent());
+    public void edit(NoteDTO noteDTO) {
+        NoteEntity oldNote = getNoteOrTrow(noteDTO.getNoteId());
+        oldNote.setTitle(noteDTO.getTitle());
+        oldNote.setContent(noteDTO.getContent());
 
         OffsetDateTime dateTime = Instant.now().atOffset(ZoneOffset.UTC);
         oldNote.setModifiedDateTime(dateTime);
@@ -58,7 +58,7 @@ public class NoteServiceImp implements NotesService {
      * @return note by id from data storage
      */
     @Override
-    public NoteGTO getById(long noteId) {
+    public NoteDTO getById(long noteId) {
         NoteEntity noteEntitiy = getNoteOrTrow(noteId);
         if (noteEntitiy == null) return null;
         return entityToGTO(noteEntitiy);
@@ -66,7 +66,7 @@ public class NoteServiceImp implements NotesService {
 
     /** @return all notes from data storage */
     @Override
-    public List<NoteGTO> getAll() {
+    public List<NoteDTO> getAll() {
         return StreamSupport.stream(noteRepository.findAll().spliterator(), false)
                 .map(this::entityToGTO)
                 .toList();
@@ -82,17 +82,29 @@ public class NoteServiceImp implements NotesService {
         noteRepository.delete(noteEntity);
     }
 
+    @Override
+    public void updateNoteDTO(NoteDTO source, NoteDTO target) {
+        if (source == null) return;
+
+        target.setNoteId(source.getNoteId());
+        target.setTitle(source.getTitle());
+        target.setContent(source.getContent());
+        target.setModifiedDateTime(source.getModifiedDateTime());
+        target.setCreationDateTime(source.getCreationDateTime());
+    }
+
     private NoteEntity getNoteOrTrow(long noteId) {
         return noteRepository.findById(noteId).orElseThrow(NoteNotFoundException::new);
     }
 
     /** Converts entity to GTO. (Transfers data) */
-    private NoteGTO entityToGTO(NoteEntity noteEntitiy) {
-        NoteGTO noteGTO = new NoteGTO();
-        noteGTO.setTitle(noteEntitiy.getTitle());
-        noteGTO.setContent(noteEntitiy.getContent());
-        noteGTO.setCreationDateTime(noteEntitiy.getCreationDateTime());
-        noteGTO.setModifiedDateTime(noteEntitiy.getModifiedDateTime());
-        return noteGTO;
+    private NoteDTO entityToGTO(NoteEntity noteEntitiy) {
+        NoteDTO noteDTO = new NoteDTO();
+        noteDTO.setNoteId(noteEntitiy.getNoteId());
+        noteDTO.setTitle(noteEntitiy.getTitle());
+        noteDTO.setContent(noteEntitiy.getContent());
+        noteDTO.setCreationDateTime(noteEntitiy.getCreationDateTime());
+        noteDTO.setModifiedDateTime(noteEntitiy.getModifiedDateTime());
+        return noteDTO;
     }
 }

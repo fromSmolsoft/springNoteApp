@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create new note</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+</head>
+
+<body style="background-color:Gray;">
+
+
+<header><h1>New note</h1></header>
+
+<form class="d-flex flex-column gap-2"
+      method="post"
+      th:action="@{/notes/create}"
+      th:object="${noteDTO}">
+    <div class="form-group">
+        <label for="title" class="control=label">Title</label>
+        <input id="title"
+               th:field="*{title}"
+               class="form-control"
+               style="background-color:LightGray;"/>
+        <small class="text-danger" th:errors="*{title}"></small>
+    </div>
+    <div class="form-group">
+        <label for="content" class="control=label">Content</label>
+        <textarea class="form-control"
+                  id="content"
+                  th:field="*{content}"
+                  rows="3"
+                  style="background-color:LightGray;"></textarea>
+        <small class="text-danger" th:errors="*{content}"></small>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="notes-button">Save</button>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-warning" th:href="@{/notes}">Cancel</button>
+    </div>
+</form>
+
+
+</body>
+
+</html>

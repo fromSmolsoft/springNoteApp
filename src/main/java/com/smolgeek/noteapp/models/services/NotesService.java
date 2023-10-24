@@ -1,6 +1,6 @@
 package com.smolgeek.noteapp.models.services;
 
-import com.smolgeek.noteapp.models.dto.NoteGTO;
+import com.smolgeek.noteapp.models.dto.NoteDTO;
 
 import java.util.List;
 
@@ -8,18 +8,20 @@ import java.util.List;
 public interface NotesService {
 
     /** Create new note  */
-    void create(NoteGTO noteGTO);
+    void create(NoteDTO noteDTO);
 
     /** Edit existing note */
-    void edit(NoteGTO noteGTO);
+    void edit(NoteDTO noteDTO);
 
     /** @return note by id from data storage */
-    NoteGTO getById(long noteId);
+    NoteDTO getById(long noteId);
 
     /** @return all notes from data storage */
-    List<NoteGTO> getAll();
+    List<NoteDTO> getAll();
 
     /** Delete note from data storage */
     void remove(long noteId);
 
+
+    void updateNoteDTO(NoteDTO noteDTO, NoteDTO note);
 }
