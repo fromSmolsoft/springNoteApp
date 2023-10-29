@@ -16,7 +16,6 @@ import java.util.List;
 /**
  * All notes are accessible under the @RequestMapping("/notes")
  */
-
 @Controller
 @RequestMapping("/notes")
 public class NoteController {
@@ -52,7 +51,7 @@ public class NoteController {
 
     /** Create form at "pages/notes/create" */
     @GetMapping("create")
-    private String renderCreateForm(@ModelAttribute NoteDTO note) {
+    public String renderCreateForm(@ModelAttribute NoteDTO note) {
         return "pages/notes/create";
     }
 
@@ -61,7 +60,7 @@ public class NoteController {
      * Implements `@Valid` jakarta validation to validate inserted data, e.g. number of characters in title field.
      */
     @PostMapping("create")
-    private String createNote(@Valid @ModelAttribute NoteDTO note, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String createNote(@Valid @ModelAttribute NoteDTO note, BindingResult result, RedirectAttributes redirectAttributes) {
 
         //validation
         if (result.hasErrors()) return renderCreateForm(note);
@@ -79,7 +78,7 @@ public class NoteController {
     //--- edit note ---
 
     @GetMapping("/edit/{noteId}")
-    private String renderEditFrom(@PathVariable Long noteId, NoteDTO note) {
+    public String renderEditFrom(@PathVariable Long noteId, NoteDTO note) {
         NoteDTO noteDTO = notesService.getById(noteId);
         notesService.updateNoteDTO(noteDTO, note);
         return "pages/notes/edit";
@@ -110,7 +109,7 @@ public class NoteController {
     //---exceptions ---
 
     @ExceptionHandler({NoteNotFoundException.class})
-    private String handleNoteNotFoundException(RedirectAttributes redirectAttributes) {
+    public String handleNoteNotFoundException(RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", "Note wasn't found.");
         return "redirect:/articles";
     }
