@@ -1,9 +1,11 @@
 package com.smolgeek.noteapp.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +16,7 @@ import java.time.OffsetDateTime;
 /** Data Transfer Object */
 @Getter
 @Setter
+@EqualsAndHashCode
 public class NoteDTO {
 
 
@@ -28,9 +31,11 @@ public class NoteDTO {
     @Size(max = 3000, message = "The title is too long")
     private String content;
 
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     @DateTimeFormat(pattern = "")
     private OffsetDateTime creationDateTime;
 
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
     @DateTimeFormat(pattern = "")
     private OffsetDateTime modifiedDateTime;
 
