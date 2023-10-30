@@ -10,9 +10,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -61,13 +61,11 @@ class NoteRepositoryTest {
 
     @Test
     public void updateNote() {
-        //todo updateNote
         NoteEntity noteEntity1 = TestUtils.generateNoteEntities(2).get(0);
         NoteEntity noteEntity2 = TestUtils.generateNoteEntities(2).get(1);
         noteEntity1.setNoteId(0L);
         noteEntity2.setNoteId(1L);
 
-        System.out.println(noteEntity2.getNoteId());
         noteRepository.save(noteEntity1);
         NoteEntity saved = noteRepository.save(noteEntity2);
 
@@ -82,8 +80,15 @@ class NoteRepositoryTest {
     }
 
     @Test
-    public void deleteNote() {
-        //todo deleteNote
+    public void removeNote() {
+        NoteEntity noteEntity2 = TestUtils.generateNoteEntities(2).get(1);
+
+        noteRepository.save(noteEntity2);
+        noteRepository.deleteById(noteEntity2.getNoteId());
+
+        Optional<NoteEntity> fetchedNote = noteRepository.findById(noteEntity2.getNoteId());
+
+        Assertions.assertThat(fetchedNote).isEmpty();
 
     }
 
