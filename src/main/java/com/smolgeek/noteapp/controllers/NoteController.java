@@ -49,14 +49,14 @@ public class NoteController {
 
     //--- create note ---
 
-    /** Create form at "pages/notes/create" */
+    /** Open form at "pages/notes/create" */
     @GetMapping("create")
     public String renderCreateForm(@ModelAttribute NoteDTO note) {
         return "pages/notes/create";
     }
 
     /**
-     * Saves newly created note. <p>
+     * Save newly created note. <p>
      * Implements `@Valid` jakarta validation to validate inserted data, e.g. number of characters in title field.
      */
     @PostMapping("create")
@@ -79,8 +79,8 @@ public class NoteController {
 
     @GetMapping("/edit/{noteId}")
     public String renderEditFrom(@PathVariable Long noteId, NoteDTO note) {
-        NoteDTO noteDTO = notesService.getById(noteId);
-        notesService.updateNoteDTO(noteDTO, note);
+        NoteDTO fetchedNoteDTO = notesService.getById(noteId);
+        notesService.updateNoteDTO(fetchedNoteDTO, note);
         return "pages/notes/edit";
     }
 

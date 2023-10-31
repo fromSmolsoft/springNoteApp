@@ -19,7 +19,6 @@ public class NoteServiceImp implements NotesService {
     @Autowired
     private NoteRepository noteRepository;
 
-
     /**
      * Create new note
      * @param noteDTO
@@ -35,6 +34,25 @@ public class NoteServiceImp implements NotesService {
         newNote.setModifiedDateTime(dateTime);
 
         noteRepository.save(newNote);
+    }
+
+    /**
+     * @param noteId
+     * @return note by id from data storage
+     */
+    @Override
+    public NoteDTO getById(long noteId) {
+        NoteEntity noteEntitiy = getNoteOrTrow(noteId);
+        if (noteEntitiy == null) return null;
+        return mapEntityToDTO(noteEntitiy);
+    }
+
+    /** @return all notes from data storage */
+    @Override
+    public List<NoteDTO> getAll() {
+        return StreamSupport.stream(noteRepository.findAll().spliterator(), false)
+                .map(this::mapEntityToDTO)
+                .toList();
     }
 
     /**
@@ -54,25 +72,6 @@ public class NoteServiceImp implements NotesService {
     }
 
     /**
-     * @param noteId
-     * @return note by id from data storage
-     */
-    @Override
-    public NoteDTO getById(long noteId) {
-        NoteEntity noteEntitiy = getNoteOrTrow(noteId);
-        if (noteEntitiy == null) return null;
-        return entityToGTO(noteEntitiy);
-    }
-
-    /** @return all notes from data storage */
-    @Override
-    public List<NoteDTO> getAll() {
-        return StreamSupport.stream(noteRepository.findAll().spliterator(), false)
-                .map(this::entityToGTO)
-                .toList();
-    }
-
-    /**
      * Delete note from data storage
      * @param noteId
      */
@@ -82,6 +81,15 @@ public class NoteServiceImp implements NotesService {
         noteRepository.delete(noteEntity);
     }
 
+    private NoteEntity getNoteOrTrow(long noteId) {
+        return noteRepository.findById(noteId).orElseThrow(NoteNotFoundException::new);
+    }
+
+    /**
+     * Updates target DTO with data from source DTO
+     * @param source DTO is read from (source)
+     * @param target DTO is written into (target)
+     */
     @Override
     public void updateNoteDTO(NoteDTO source, NoteDTO target) {
         if (source == null) return;
@@ -93,18 +101,17 @@ public class NoteServiceImp implements NotesService {
         target.setCreationDateTime(source.getCreationDateTime());
     }
 
-    private NoteEntity getNoteOrTrow(long noteId) {
-        return noteRepository.findById(noteId).orElseThrow(NoteNotFoundException::new);
-    }
-
-    /** Converts entity to GTO. (Transfers data) */
-    private NoteDTO entityToGTO(NoteEntity noteEntitiy) {
+    /**
+     * Converts entity to GTO. (Transfers data)
+     * @param noteEntity source of data
+     */
+    public NoteDTO mapEntityToDTO(NoteEntity noteEntity) {
         NoteDTO noteDTO = new NoteDTO();
-        noteDTO.setNoteId(noteEntitiy.getNoteId());
-        noteDTO.setTitle(noteEntitiy.getTitle());
-        noteDTO.setContent(noteEntitiy.getContent());
-        noteDTO.setCreationDateTime(noteEntitiy.getCreationDateTime());
-        noteDTO.setModifiedDateTime(noteEntitiy.getModifiedDateTime());
+        noteDTO.setNoteId(noteEntity.getNoteId());
+        noteDTO.setTitle(noteEntity.getTitle());
+        noteDTO.setContent(noteEntity.getContent());
+        noteDTO.setCreationDateTime(noteEntity.getCreationDateTime());
+        noteDTO.setModifiedDateTime(noteEntity.getModifiedDateTime());
         return noteDTO;
     }
 }
