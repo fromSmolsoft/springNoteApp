@@ -24,7 +24,7 @@ class NoteRepositoryTest {
 
     @Test
     public void saveNoteReturnSavedNote() {
-        NoteEntity noteEntity01 = TestUtils.generateNoteEntities(1).get(0);
+        NoteEntity noteEntity01 = TestUtils.generateNoteEntitiesNoId(1).get(0);
 
         NoteEntity savedNote = noteRepository.save(noteEntity01);
 
@@ -34,7 +34,7 @@ class NoteRepositoryTest {
 
     @Test
     public void getNoteById() {
-        NoteEntity noteEntity01 = TestUtils.generateNoteEntities(2).get(1);
+        NoteEntity noteEntity01 = TestUtils.generateNoteEntitiesNoId(2).get(1);
 
         NoteEntity savedNote = noteRepository.save(noteEntity01);
         long noteId = savedNote.getNoteId();
@@ -47,8 +47,10 @@ class NoteRepositoryTest {
 
     @Test
     public void getAllNotes() {
-        NoteEntity noteEntity01 = TestUtils.generateNoteEntities(2).get(0);
-        NoteEntity noteEntity02 = TestUtils.generateNoteEntities(2).get(1);
+        List<NoteEntity> inputNoteEntities =TestUtils.generateNoteEntitiesNoId(2);
+
+        NoteEntity noteEntity01 = inputNoteEntities.get(0);
+        NoteEntity noteEntity02 = inputNoteEntities.get(1);
 
         noteRepository.save(noteEntity01);
         noteRepository.save(noteEntity02);
@@ -61,8 +63,8 @@ class NoteRepositoryTest {
 
     @Test
     public void updateNote() {
-        NoteEntity noteEntity1 = TestUtils.generateNoteEntities(2).get(0);
-        NoteEntity noteEntity2 = TestUtils.generateNoteEntities(2).get(1);
+        NoteEntity noteEntity1 = TestUtils.generateNoteEntitiesNoId(2).get(0);
+        NoteEntity noteEntity2 = TestUtils.generateNoteEntitiesNoId(2).get(1);
         noteEntity1.setNoteId(0L);
         noteEntity2.setNoteId(1L);
 
@@ -81,7 +83,7 @@ class NoteRepositoryTest {
 
     @Test
     public void removeNote() {
-        NoteEntity noteEntity2 = TestUtils.generateNoteEntities(2).get(1);
+        NoteEntity noteEntity2 = TestUtils.generateNoteEntitiesNoId(2).get(1);
 
         noteRepository.save(noteEntity2);
         noteRepository.deleteById(noteEntity2.getNoteId());
