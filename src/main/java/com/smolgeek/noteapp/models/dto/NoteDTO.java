@@ -3,7 +3,7 @@ package com.smolgeek.noteapp.models.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,9 +14,8 @@ import java.time.OffsetDateTime;
 /** Data Transfer Object */
 @Getter
 @Setter
+@EqualsAndHashCode
 public class NoteDTO {
-
-
 
     private long noteId;
 
