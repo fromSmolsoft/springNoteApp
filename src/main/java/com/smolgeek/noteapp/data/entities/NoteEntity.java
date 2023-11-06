@@ -4,9 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
@@ -16,10 +14,12 @@ import java.util.Date;
 /** Notes table in database */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class NoteEntity {
 
-    @Setter(value = AccessLevel.PRIVATE)
+//    @Setter(value = AccessLevel.PRIVATE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long noteId;
