@@ -15,8 +15,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,14 +40,13 @@ class NoteControllerTest {
      */
     @Test
     void shouldReturnStatusOK() throws Exception {
-        List<NoteDTO> dummyList = generateNoteDTOs(1);
+        List<NoteDTO> dummyList = TestUtils.generateNoteDTOsId(1);
         String expectedJson = TestUtils.mapToJson(dummyList);
         when(service.getAll()).thenReturn(dummyList);
 
         this.mockMvc.perform(get("/notes"))
                 .andDo(print())
                 .andExpect(status().isOk());
-
     }
 
     /**
@@ -60,7 +57,7 @@ class NoteControllerTest {
     void renderNoteDetail() throws Exception {
 
         // mocking service response
-        NoteDTO mockNoteDTO = generateNoteDTOs(1).get(0);
+        NoteDTO mockNoteDTO = TestUtils.generateNoteDTOsId(1).get(0);
         long id = mockNoteDTO.getNoteId();
         when(service.getById(id)).thenReturn(mockNoteDTO);
 
@@ -82,7 +79,6 @@ class NoteControllerTest {
                 .getModel()
                 .get("note"));
         assertThat(outputNoteGTOJson).isEqualTo(inputNoteDTOJson);
-
     }
 
     /**
@@ -91,7 +87,7 @@ class NoteControllerTest {
      */
     @Test
     void shouldRenderAllNote() throws Exception {
-        List<NoteDTO> mockNoteDTOs = generateNoteDTOs(2);
+        List<NoteDTO> mockNoteDTOs = TestUtils.generateNoteDTOsId(2);
         when(service.getAll()).thenReturn(mockNoteDTOs);
         String URI = "/notes";
 
@@ -105,50 +101,6 @@ class NoteControllerTest {
                 .get("notes");
         String outputJson = TestUtils.mapToJson(outputNoteDTOs);
         assertThat(outputJson).isEqualTo(expectedJson);
-
     }
 
-    /**
-     * Generates a list of NoteDTOs with the given number of elements.
-     * @param n the number of NoteDTOs to generate
-     * @return the list of generated NoteDTOs
-     */
-    private List<NoteDTO> generateNoteDTOs(int n) {
-        OffsetDateTime time = OffsetDateTime.parse("2024-01-01T01:01:01.111+01:00");
-        List<NoteDTO> list = new ArrayList<>(n);
-
-        for (int i = 0; i < n; i++) {
-            NoteDTO noteDTO = new NoteDTO();
-            noteDTO.setNoteId(i);
-            noteDTO.setTitle(i + " Title");
-            noteDTO.setContent(i + " content");
-            noteDTO.setCreationDateTime(time);
-            noteDTO.setModifiedDateTime(time);
-            list.add(noteDTO);
-        }
-        return list;
-    }
-
-    /**
-     * Generates a list of JSON strings representing notes.
-     * @param n the number of notes to generate
-     * @return a list of JSON strings representing notes
-     */
-    private List<String> generateNoteJSons(int n) {
-        OffsetDateTime time = OffsetDateTime.parse("2024-01-01T01:01:01.111+01:00");
-        List<String> list = new ArrayList<>(n);
-
-        for (int i = 0; i < n; i++) {
-            String json =
-                    "{\n" +
-                    "    \"noteId\" : " + i + ",\n" +
-                    "    \"title\" : \"" + i + " Title\",\n" +
-                    "    \"content\" : \"" + i + " Content\",\n" +
-                    "    \"creationDateTime\" : \"" + time + "\",\n" +
-                    "    \"modifiedDateTime\" : \"" + time + "\"" +
-                    "\n}";
-            list.add(json);
-        }
-        return list;
-    }
 }
